@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:tiktok_clone_app/core/constants.dart';
+import 'package:tiktok_clone_app/core/constants/constants.dart';
 
 class TextInputField extends StatelessWidget {
   final TextEditingController controller;

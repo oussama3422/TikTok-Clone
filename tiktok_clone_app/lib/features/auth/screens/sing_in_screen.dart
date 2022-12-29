@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tiktok_clone_app/core/constants.dart';
+import 'package:tiktok_clone_app/core/constants/constants.dart';
 import 'package:tiktok_clone_app/features/auth/widget/text_input_field.dart';
 
 class SingInScreen extends StatefulWidget {

@@ -16,7 +16,7 @@ class AuthRepository{
   final FirebaseFirestore _firestore;
    AuthRepository(this._auth,this._firestore);
   
-
+  
   Stream<User?> get authStateChange => _auth.authStateChanges();
 
   // create users geter 
@@ -31,9 +31,9 @@ class AuthRepository{
             name: username,
             email:email,
             uid:credential.user!.uid,
-            profilePhone: downloadUrl
+            profilePhoto: downloadUrl
             );
-          await _firestore.collection('users').doc(credential.user!.uid).set(user.toMap());
+          await _users.doc(user.uid).set(user.toMap());
     }on FirebaseException catch(error){
         showSnackBar(context, error.message!);
     }
@@ -42,16 +42,21 @@ class AuthRepository{
 // sing In with email and password [has already account]
   void singIn(BuildContext context,String email,String password)async{
     try{
-        await _auth.signInWithEmailAndPassword(email: email, password: password);
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
     }on FirebaseException catch(error){
       showSnackBar(context, error.message!);
     }
   }
 
 
-// get User Data
+// get User Data  
   Stream<model.User> getUserData(String uid){
-  return _users.doc(uid).snapshots().map((event) => model.User.fromMap(event.data() as Map<String,dynamic> ));
-}
+    return _users.doc(uid).snapshots().map((event) => model.User.fromMap(event.data() as Map<String,dynamic> ));
+  }
+  
 
+  //User
+  getUser(){
+    return _auth.currentUser!.uid;
+  }
 }

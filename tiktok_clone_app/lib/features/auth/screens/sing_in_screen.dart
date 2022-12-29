@@ -1,20 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tiktok_clone_app/core/constants/constants.dart';
+import 'package:tiktok_clone_app/features/auth/controller/auth_controller.dart';
 import 'package:tiktok_clone_app/features/auth/widget/text_input_field.dart';
 
-class SingInScreen extends StatefulWidget {
+import '../../../core/utils/utils.dart';
+
+class SingInScreen extends ConsumerStatefulWidget {
+  static const routeName='/sing-in';
   const SingInScreen({super.key});
 
   @override
-  State<SingInScreen> createState() => _SingInScreenState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _SingInScreenState();
 }
 
-class _SingInScreenState extends State<SingInScreen> {
-
+class _SingInScreenState extends ConsumerState<SingInScreen> {
 
 
   final TextEditingController _emailController=TextEditingController();
   final TextEditingController _passwordController=TextEditingController();
+
+
+  signIn(){
+    if(_emailController.text.trim().isNotEmpty && _passwordController.text.trim().isNotEmpty ){
+     ref.read(authCntrllrProvider).singIn(context, _emailController.text.trim(), _passwordController.text.trim());
+    }else{
+      showSnackBar(context,'please fill all the field');
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,7 +77,7 @@ class _SingInScreenState extends State<SingInScreen> {
                   borderRadius:const BorderRadius.all(Radius.circular(5))
                   ),
                 child:InkWell(
-                  onTap:(){print('hello world');},
+                  onTap:signIn,
                   child: const Center(
                     child:  Text(
                        'Login',

@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:tiktok_clone_app/core/constants/constants.dart';
+import 'package:tiktok_clone_app/features/auth/screens/sing_in_screen.dart';
 import 'package:tiktok_clone_app/features/auth/screens/sing_up_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:tiktok_clone_app/features/home/screens/home_screen.dart';
 import 'package:tiktok_clone_app/router.dart';
 import 'common/error_text.dart';
 import 'common/loader.dart';
@@ -33,37 +35,28 @@ class MyApp extends ConsumerStatefulWidget {
 class _MyAppState extends ConsumerState<MyApp> {
     model.User? userModel;
 
-    void getData(WidgetRef ref,User data)async{
-      userModel=await ref.watch(authControllerProvider.notifier).getUserData(data.uid).first;
-      ref.read(userProvder.notifier).update((state) => userModel);
-      setState(() {});
-    }
   @override
   Widget build(BuildContext context) {
-     return ref.watch(authStateChangeProvider).when(
-      data:(data) => MaterialApp.router(
+     return  MaterialApp( 
       debugShowCheckedModeBanner: false,
       title: 'TikTok Clone',
         theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: backgroundColor,
       ),
-      routerDelegate:RoutemasterDelegate(routesBuilder:(context){
-        if (data!=null){
-          getData(ref, data);
-          if(userModel!=null){
-            return loggedInRoute;
-          }
+      onGenerateRoute: (setting)=>genereteRoute(setting),
+      home:ref.watch(authStateChangeProvider).when(
+      data:(user) {
+        if(user==null){
+            return const SingInScreen();
+        }else{
+          return const HomeScreen();
         }
-        return loggedOutRoute;
-      }),
-      routeInformationParser: const RoutemasterParser(),
-    ),
-     error: (error,snackTrace)=>ErrorText(error: error.toString()),
+      },
+      error: (error,snackTrace)=>ErrorText(error: error.toString()),
      loading: ()=>const Loader(),
-    );
+     )
+     );
   }
 }
 
 
-
-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

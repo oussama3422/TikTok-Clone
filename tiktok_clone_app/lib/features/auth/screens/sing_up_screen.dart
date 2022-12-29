@@ -68,12 +68,15 @@ class _SingUpScreenState extends  ConsumerState<SingUpScreen> {
                 const SizedBox(height:15,),
                 Stack(
                   children: [
-                     const  CircleAvatar(
+                       CircleAvatar(
                       backgroundColor: Colors.black,
                       radius: 70,
                       backgroundImage:
                        NetworkImage(
-                       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS71w7bLh5Kllo26p9H4rw0lWE_DvPPeEp7vA&usqp=CAU',
+                        image==null?
+                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS71w7bLh5Kllo26p9H4rw0lWE_DvPPeEp7vA&usqp=CAU'
+                         :
+                        image!.path
                         )
                       ),
                     Positioned(

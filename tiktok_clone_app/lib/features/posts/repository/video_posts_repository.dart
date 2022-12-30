@@ -100,5 +100,25 @@ Stream<List<Comment>> getCommentsOfPost(String postId){
      }
      
   }
+
+  //like Comment Method
+  
+  likeComment(String id,WidgetRef ref)async{
+    var uid=ref.read(authCntrllrProvider).getUser();
+    DocumentSnapshot doc=await _videos.doc(_postId).collection('comments').doc(id).get();
+
+    if((doc.data()! as dynamic)['likes'].contains(uid)){
+      _videos.doc(_postId).collection('comments').doc(id).update(
+        {
+          'likes':FieldValue.arrayRemove([uid]),
+        }
+      );
+    }else{
+       _videos.doc(_postId).collection('comments').doc(id).update(
+        {
+          'likes':FieldValue.arrayUnion([uid]),
+       });
+    }
+  }
   
 }

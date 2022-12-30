@@ -1,5 +1,7 @@
 
 
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -34,7 +36,7 @@ class HomeRepository{
   Future<String> _uploadVideoToStorage(String id,String videoPath)async{
     Reference ref = firebaseStorage.ref().child('videos').child(id);
 
-    UploadTask uploadTask =ref.putFile(_compreseVideo(videoPath));
+    var uploadTask =ref.putFile(await _compreseVideo(videoPath));
     TaskSnapshot snap=await uploadTask;
     String downloadUrl=await snap.ref.getDownloadURL();
 
@@ -49,7 +51,7 @@ class HomeRepository{
   // upload image to Storage
   Future<String> _uploadImageToStorage(String id,String videoPath)async{
     Reference ref = firebaseStorage.ref().child('thumbnails').child(id);
-    UploadTask uploadTask =ref.putFile(_getThumbnail(videoPath));
+    UploadTask uploadTask =ref.putFile(await _getThumbnail(videoPath));
     TaskSnapshot snap=await uploadTask;
     String downloadUrl=await snap.ref.getDownloadURL();
 

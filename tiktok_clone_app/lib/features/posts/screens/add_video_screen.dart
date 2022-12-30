@@ -5,17 +5,20 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tiktok_clone_app/core/constants/constants.dart';
+import 'package:tiktok_clone_app/core/utils/utils.dart';
 import 'package:tiktok_clone_app/features/home/screens/confirm_screen.dart';
 
 class AddVideoScreen extends StatelessWidget {
   const AddVideoScreen({super.key});
 
   pickVideo(ImageSource src,BuildContext context,)async{
-    final video=await ImagePicker().pickVideo(source: src);
+    var video=await ImagePicker().pickVideo(source: src);
     if(video!=null){
-      MaterialPageRoute(
-          builder: (context)=>ConfirmScreen(videoFile: File(video.path), videoPath: video.path)
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context)=>ConfirmScreen(videoFile: File(video.path), videoPath: video.path))
       );
+    }else{
+      showSnackBar(context, 'Somthing Went Wrong');
     }
   }
 

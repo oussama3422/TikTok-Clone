@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tiktok_clone_app/core/constants/constants.dart';
 import 'package:tiktok_clone_app/features/auth/controller/auth_controller.dart';
+import 'package:tiktok_clone_app/features/auth/screens/sing_up_screen.dart';
 import 'package:tiktok_clone_app/features/auth/widget/text_input_field.dart';
 
 import '../../../core/utils/utils.dart';
@@ -91,7 +92,10 @@ class _SingInScreenState extends ConsumerState<SingInScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text('Don\'t have an account ? ',style: TextStyle(fontSize: 20),),
-                  InkWell(child: Text('Register',style:TextStyle(fontSize: 20,color:btnClr)),onTap: (){print('Register');},)
+                  InkWell(
+                    child: Text('Register',style:TextStyle(fontSize: 20,color:btnClr)),
+                    onTap: ()=>Navigator.of(context).pushNamed(SingUpScreen.routeName),
+                    )
                 ],
               )
 

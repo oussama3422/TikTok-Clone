@@ -19,7 +19,7 @@ class _ConfirmScreenState extends ConsumerState<ConfirmScreen> {
   TextEditingController songController=TextEditingController();
   TextEditingController captionController=TextEditingController();
 
-  void upladVideo(){
+   upladVideo(){
     ref.read(homeControllerProvider).uploadVideo(
       context,
       songController.text.trim(),

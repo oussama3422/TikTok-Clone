@@ -4,7 +4,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tiktok_clone_app/core/constants/constants.dart';
+import 'package:tiktok_clone_app/features/auth/controller/auth_controller.dart';
 import 'package:tiktok_clone_app/features/posts/controller/video_posts_controller.dart';
+import 'package:tiktok_clone_app/features/posts/screens/comment_screen.dart';
 import 'package:tiktok_clone_app/features/posts/widget/circle_animation.dart';
 import 'package:tiktok_clone_app/models/video.dart';
 
@@ -153,11 +155,11 @@ class VideoScreen extends ConsumerWidget {
                                         Column(
                                         children: [
                                           InkWell(
-                                            onTap: ()=>ref.read(videoPostsControllerProvider).getPostsVideos(),
+                                            onTap:()=> likeVideo(ref,data.id),
                                             child: Icon(
                                               Icons.favorite,
                                               size:40,
-                                              color:btnClr
+                                              color:data.likes.contains(ref.read(authCntrllrProvider).getUser())? Colors.red:Colors.white,
                                               ),
                                             ),
                                             const SizedBox(height: 7),
@@ -170,7 +172,7 @@ class VideoScreen extends ConsumerWidget {
                                         Column(
                                         children: [
                                           InkWell(
-                                            onTap: (){},
+                                            onTap: ()=>Navigator.of(context).pushNamed(CommentScreen.routeName,arguments: data.id),
                                             child: Icon(
                                               Icons.comment,
                                               size:40,color:btnClr

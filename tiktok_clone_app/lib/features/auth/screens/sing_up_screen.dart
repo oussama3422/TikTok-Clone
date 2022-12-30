@@ -4,12 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tiktok_clone_app/common/loader.dart';
 import 'package:tiktok_clone_app/features/auth/controller/auth_controller.dart';
+import 'package:tiktok_clone_app/features/auth/screens/sing_in_screen.dart';
 import '../../../core/constants/constants.dart';
 import '../../../core/utils/utils.dart';
 import '../widget/text_input_field.dart';
 
 class SingUpScreen extends ConsumerStatefulWidget {
+  static const routeName='/sing-up';
   const SingUpScreen({super.key});
 
   @override
@@ -42,11 +45,14 @@ class _SingUpScreenState extends  ConsumerState<SingUpScreen> {
 
   pickImg()async{
     final pickImage=await ImagePicker().pickImage(source:ImageSource.gallery);
-    image = File(pickImage!.path);
+    setState(() {
+      image = File(pickImage!.path);      
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final isLoading=ref.watch(authControllerProvider);
     return Scaffold(
       body:Container(
         alignment: Alignment.center,
@@ -68,16 +74,19 @@ class _SingUpScreenState extends  ConsumerState<SingUpScreen> {
                 const SizedBox(height:15,),
                 Stack(
                   children: [
-                       CircleAvatar(
+                    image==null?
+                      const CircleAvatar(
                       backgroundColor: Colors.black,
                       radius: 70,
                       backgroundImage:
-                       NetworkImage(
-                        image==null?
+                        NetworkImage(
                             'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS71w7bLh5Kllo26p9H4rw0lWE_DvPPeEp7vA&usqp=CAU'
-                         :
-                        image!.path
                         )
+                      ):
+                       CircleAvatar(
+                      backgroundColor: Colors.black,
+                      radius: 70,
+                      backgroundImage:FileImage(image!)
                       ),
                     Positioned(
                       bottom:-10,
@@ -130,8 +139,8 @@ class _SingUpScreenState extends  ConsumerState<SingUpScreen> {
                     ),
                   child:InkWell(
                     onTap:()=>singUp(context),
-                    child: const Center(
-                      child:  Text(
+                    child:  Center(
+                      child:isLoading?const Loader(): const Text(
                          'Register',
                           style:TextStyle(fontSize: 20,fontWeight: FontWeight.w800)
                          ),
@@ -143,7 +152,10 @@ class _SingUpScreenState extends  ConsumerState<SingUpScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text('Already have an account ? ',style: TextStyle(fontSize: 20),),
-                    InkWell(child: Text('Login',style:TextStyle(fontSize: 20,color:btnClr)),onTap: (){print('Register');},)
+                    InkWell(
+                      child: Text('Login',style:TextStyle(fontSize: 20,color:btnClr)),
+                      onTap: ()=>Navigator.of(context).pushNamed(SingInScreen.routeName),
+                      )
                   ],
                 )
         

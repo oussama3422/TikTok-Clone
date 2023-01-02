@@ -56,5 +56,10 @@ class AuthController extends StateNotifier<bool>{
   getUser(){
    return authRepository.getUser();
   }
+
+  //signOut
+   Future<void> singOut()async{
+    authRepository.singOut();
+  }
   
   }

@@ -8,14 +8,20 @@ import 'package:tiktok_clone_app/features/auth/controller/auth_controller.dart';
 import 'package:tiktok_clone_app/features/posts/controller/video_posts_controller.dart';
 import 'package:tiktok_clone_app/features/posts/screens/comment_screen.dart';
 import 'package:tiktok_clone_app/features/posts/widget/circle_animation.dart';
+import 'package:tiktok_clone_app/models/links.dart';
 import 'package:tiktok_clone_app/models/video.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import '../../../common/loader.dart';
 import '../widget/video_player_item.dart';
 
-class VideoScreen extends ConsumerWidget {
+class VideoScreen extends ConsumerStatefulWidget {
   const VideoScreen({super.key});
-
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _VideoScreenState();
+}
+class _VideoScreenState extends ConsumerState<VideoScreen> {
+ 
   buildProfuile(String profilePhoto){
     return SizedBox(
       width: 60,
@@ -69,20 +75,36 @@ class VideoScreen extends ConsumerWidget {
     )
    );
   }
+  
+
+  // List<Video> videos=[];
+  // @override
+  // void initState() { 
+  //   super.initState();
+  //   videos=ref.read(videoPostsControllerProvider).getListVideos();
+  // }
+
 
 
   // Like Method from Video controller
   likeVideo(WidgetRef ref,String id){
-     ref.read(videoPostsControllerProvider).likeVideo(id);
+     ref.read(videoPostsControllerProvider).likeVideo(id,ref);
   }
 
+  late YoutubePlayerController youtubePlayerController;
 
   @override
-  Widget build(BuildContext context,WidgetRef ref) {
+  void dispose() {
+    youtubePlayerController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final size= MediaQuery.of(context).size;
     return Scaffold(
-      body: StreamBuilder<List<Video>>(
-          stream:ref.read(videoPostsControllerProvider).getPostsVideos(),
+      body: StreamBuilder<List<Links>>(
+          stream:ref.read(videoPostsControllerProvider).getlinVideos(context,ref),
           builder:(context,snapshot){
             if(snapshot.connectionState==ConnectionState.waiting){
                  return const Loader();
@@ -95,7 +117,7 @@ class VideoScreen extends ConsumerWidget {
              final data=snapshot.data![index];
                 return Stack(
                   children: [
-                    VideoPlayerItem(videoUrl:data.videoUrl),
+                    VideoPlayerItem(videoUrl:youtubePlayerController.metadata.videoId,youtubePlayerController: youtubePlayerController,),
                     Column(
                       children: [
                          const SizedBox(height:100),
@@ -113,7 +135,7 @@ class VideoScreen extends ConsumerWidget {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                        Text(
-                                        data.username,
+                                        youtubePlayerController.metadata.title,
                                         style:const TextStyle(
                                           color:whiteColor,
                                           fontSize: 20,
@@ -121,7 +143,7 @@ class VideoScreen extends ConsumerWidget {
                                         )
                                         ),
                                        Text(
-                                        data.caption,
+                                        youtubePlayerController.metadata.author,
                                         style:const TextStyle(
                                           color:whiteColor,
                                           fontSize: 15,
@@ -132,7 +154,7 @@ class VideoScreen extends ConsumerWidget {
                                           children: [
                                             const Icon(Icons.music_note,size:15,color:whiteColor),
                                             Text(
-                                              data.songName,
+                                              'songs',
                                               style:const TextStyle(
                                                color:whiteColor,
                                                fontSize: 15,
@@ -151,20 +173,22 @@ class VideoScreen extends ConsumerWidget {
                                   child:Column(
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     children: [
-                                        buildProfuile(data.profilePhoto),
+                                        buildProfuile(''),
                                         Column(
                                         children: [
                                           InkWell(
-                                            onTap:()=> likeVideo(ref,data.id),
+                                            onTap:(){},
+                                            // onTap:()=> likeVideo(ref,data.id),
                                             child: Icon(
                                               Icons.favorite,
                                               size:40,
-                                              color:data.likes.contains(ref.read(authCntrllrProvider).getUser())? Colors.red:Colors.white,
+                                              // color:data.likes.contains(ref.read(authCntrllrProvider).getUser())? btnClr:whiteColor,
+                                              color:whiteColor,
                                               ),
                                             ),
                                             const SizedBox(height: 7),
                                             Text(
-                                              data.likes.length.toString(),
+                                              '1',
                                               style:const TextStyle(fontSize: 20,color:whiteColor)
                                               )
                                         ],
@@ -172,7 +196,8 @@ class VideoScreen extends ConsumerWidget {
                                         Column(
                                         children: [
                                           InkWell(
-                                            onTap: ()=>Navigator.of(context).pushNamed(CommentScreen.routeName,arguments: data.id),
+                                            onTap: (){},
+                                            // onTap: ()=>Navigator.of(context).pushNamed(CommentScreen.routeName,arguments: data.id),
                                             child: Icon(
                                               Icons.comment,
                                               size:40,color:btnClr
@@ -180,7 +205,7 @@ class VideoScreen extends ConsumerWidget {
                                             ),
                                             const SizedBox(height: 7),
                                             Text(
-                                              data.shareCount.toString(),
+                                              '1',
                                               style:const TextStyle(fontSize: 20,color:whiteColor)
                                               )
                                         ],
@@ -198,7 +223,7 @@ class VideoScreen extends ConsumerWidget {
                                             const Text('2',style:TextStyle(fontSize: 20,color:whiteColor))
                                         ],
                                         ),
-                                       CircleAnimation(child:buildMusicAlbum(data.profilePhoto))
+                                       CircleAnimation(child:buildMusicAlbum(youtubePlayerController.metadata.videoId))
                                     ],
                                   ),
                                 ),

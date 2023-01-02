@@ -59,4 +59,10 @@ class AuthRepository{
   getUser(){
     return _auth.currentUser!.uid;
   }
+
+  //singOut
+
+  Future<void> singOut()async{
+    _auth.signOut();
+  }
 }

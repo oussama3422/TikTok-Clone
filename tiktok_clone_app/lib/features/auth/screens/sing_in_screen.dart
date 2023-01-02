@@ -25,6 +25,9 @@ class _SingInScreenState extends ConsumerState<SingInScreen> {
   signIn(){
     if(_emailController.text.trim().isNotEmpty && _passwordController.text.trim().isNotEmpty ){
      ref.read(authCntrllrProvider).singIn(context, _emailController.text.trim(), _passwordController.text.trim());
+     setState(() {
+       
+     });
     }else{
       showSnackBar(context,'please fill all the field');
     }

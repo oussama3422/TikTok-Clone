@@ -4,6 +4,7 @@ import 'package:tiktok_clone_app/core/constants/constants.dart';
 import '../widgets/custom_icon.dart';
 
 class HomeScreen extends StatefulWidget {
+  static const routeName='/home-screen';
   const HomeScreen({super.key});
 
   @override
@@ -11,7 +12,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _indexPage=0;
+ int _indexPage=0;
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(

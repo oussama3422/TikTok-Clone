@@ -38,6 +38,7 @@ class _SingUpScreenState extends  ConsumerState<SingUpScreen> {
       _passwordController.text.trim(),
       image!,
       );
+      setState(() {});
     }else{
       showSnackBar(context,'please fill all the field');
     } 
